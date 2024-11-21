@@ -2,7 +2,7 @@
   "name": "react-browser-storage",
   "version": "1.0.0",
   "license": "MIT",
-  "author": "Teekam Kumar",
+  "author": "Atul Kumar",
   "description": "A TypeScript library providing a unified API for managing browser storage with support for multiple storage types (localStorage, sessionStorage, cookies, IndexedDB, Temp) and optional encryption for secure data storage.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

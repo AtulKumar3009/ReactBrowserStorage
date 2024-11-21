@@ -49,16 +49,16 @@ To store data in a specific storage type, you can use the `set` method. Data can
 
 ```ts
 // Store data in localStorage without encryption
-storage.local.set('username', 'Teekam', false);
+storage.local.set('username', 'Atul', false);
 
 // Store data in sessionStorage with encryption
-storage.session.set('username', 'Teekam', true);
+storage.session.set('username', 'Atul', true);
 
 // Store data in Temp storage (will be cleared on page refresh)
 storage.temp.set('tempData', { key: 'value' }, false);
 
 // Store data in IndexedDB
-storage.indexedDB.set('userData', { name: 'Teekam', age: 30 }, false);
+storage.indexedDB.set('userData', { name: 'Atul', age: 30 }, false);
 
 // Store data in cookies with encryption
 storage.cookie.set('authToken', 'your-auth-token', true);
@@ -147,11 +147,11 @@ import storage from 'react-browser-storage';
 storage.configure({ encryptionKey: 'secret-key' });
 
 // Set encrypted data in localStorage
-storage.local.set('username', 'Teekam', true);
+storage.local.set('username', 'Atul', true);
 
 // Get encrypted data from localStorage
 const username = await storage.local.get('username', true);
-console.log(username); // 'Teekam'
+console.log(username); // 'Atul'
 
 // Clear encrypted data from localStorage
 storage.local.clear('username', true);
