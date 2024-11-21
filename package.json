@@ -1,0 +1,39 @@
+{
+  "name": "react-browser-storage",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Teekam Kumar",
+  "description": "A TypeScript library providing a unified API for managing browser storage with support for multiple storage types (localStorage, sessionStorage, cookies, IndexedDB, Temp) and optional encryption for secure data storage.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "idb": "^8.0.0"
+  },
+  "keywords": [
+    "react",
+    "browser-storage",
+    "localStorage",
+    "sessionStorage",
+    "cookies",
+    "IndexedDB",
+    "Temp",
+    "encryption",
+    "typescript"
+  ]
+}

@@ -1,0 +1,24 @@
+# Node.js
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Output directories
+dist/
+coverage/
+
+# Jest
+.jest/
+
+# VSCode
+.vscode/
+
+# Environment files
+.env
+.env.local
