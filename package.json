@@ -1,6 +1,6 @@
 {
   "name": "web-storage-helper",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "author": "Atul Kumar",
   "description": "A TypeScript library providing a unified API for managing browser storage with support for multiple storage types (localStorage, sessionStorage, cookies, IndexedDB, Temp) and optional encryption for secure data storage.",

@@ -1,9 +1,10 @@
 import { openDB, IDBPDatabase } from 'idb';
+import { StorageGeneric } from '../types';
 
-const DB_NAME = 'react-browser-storage'
+const DB_NAME = 'WebStorageHelper'
 const STORE_NAME = DB_NAME + '-store';
 
-class IndexedDB {
+class IndexedDB implements StorageGeneric {
   private static instance: IndexedDB;
   private dbPromise: Promise<IDBPDatabase>;
 
@@ -24,14 +25,15 @@ class IndexedDB {
     return IndexedDB.instance;
   }
 
-  async set(key: string, value: any) {
+  async set(key: string, value: string) {
     const db = await this.dbPromise;
     return db.put(STORE_NAME, value, key);
   }
 
-  async get(key: string): Promise<any> {
+  async get(key: string) {
     const db = await this.dbPromise;
-    return await db.get(STORE_NAME, key);
+    const value = await db.get(STORE_NAME, key);
+    return value === undefined ? null : value;
   }
 
   async clear(key?: string) {

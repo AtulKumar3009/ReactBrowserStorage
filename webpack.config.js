@@ -1,13 +1,16 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './src/index.ts', // Entry file
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js',
-        library: 'react-browser-storage',
-        libraryTarget: 'umd',
+        library: {
+            name: 'web-storage-helper',
+            type: 'umd',
+        },
         globalObject: 'this',
+        clean: true,
     },
     module: {
         rules: [
@@ -21,5 +24,9 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.js'],
     },
-    mode: 'development',
+    mode: 'production',
+    optimization: {
+        minimize: true,
+    },
+    devtool: 'source-map',
 };

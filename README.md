@@ -1,6 +1,6 @@
-# React Browser Storage
+# Web Storage Helper
 
-`react-browser-storage` is a TypeScript-based library that simplifies working with different types of storage in the browser (like `localStorage`, `sessionStorage`, `cookies`, `IndexedDB`, and `Temp` storage). It supports data encryption and ensures safe handling of sensitive information.
+`web-storage-helper` is a TypeScript-based library that simplifies working with different types of storage in the browser (like `localStorage`, `sessionStorage`, `cookies`, `IndexedDB`, and `Temp` storage). It supports data encryption and ensures safe handling of sensitive information.
 
 ## Features
 
@@ -12,10 +12,10 @@
 
 ## Installation
 
-You can easily install `react-browser-storage` via **Yarn**:
+You can easily install `web-storage-helper` via **Yarn**:
 
 ```bash
-yarn add react-browser-storage
+yarn add web-storage-helper
 ```
 
 ## Project Setup
@@ -23,7 +23,7 @@ yarn add react-browser-storage
 To get started, you need to configure the library and set up your encryption key if you plan to use encryption for data storage and retrieval.
 
 ```ts
-import {configureStorage} from 'react-browser-storage';
+import {configureStorage} from 'web-storage-helper';
 
 // Configure encryption key globally
 configureStorage({ encryptionKey: 'your-secret-key', encodeKey: true });
@@ -34,7 +34,7 @@ configureStorage({ encryptionKey: 'your-secret-key', encodeKey: true });
 The storage API is exposed via the `storage` object, which contains methods for `localStorage`, `sessionStorage`, `cookies`, `IndexedDB`, and `Temp` storage. Additionally, the `configure` method is now available directly from the `storage` object.
 
 ```ts
-import storage from 'react-browser-storage';
+import storage from 'web-storage-helper';
 ```
 
 You can then use the `set`, `get`, and `clear` methods provided for each storage type.
@@ -141,7 +141,7 @@ Clears data from the specified storage type.
 ## Example: Full Usage Example
 
 ```ts
-import storage from 'react-browser-storage';
+import storage from 'web-storage-helper';
 
 // Configure encryption key globally
 storage.configure({ encryptionKey: 'secret-key' });

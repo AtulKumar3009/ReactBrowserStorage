@@ -1,35 +1,55 @@
-export default class Session {
+import { StorageBrowser, StorageGeneric } from "../types";
+import FakeStorage from "./FakeStorage";
+
+class Session implements StorageGeneric {
+
+    private static instance: Session;
+    private store: StorageBrowser;
+
+
+    constructor() {
+        this.store = (sessionStorage === undefined ? new FakeStorage() : sessionStorage) as StorageBrowser
+    }
+
+    static getInstance(): Session {
+        if (!this.instance) {
+            this.instance = new Session();
+        }
+        return this.instance;
+    }
     private isStorageAvailable(): boolean {
         try {
             return (
-                typeof sessionStorage !== 'undefined' &&
-                'getItem' in sessionStorage &&
-                'setItem' in sessionStorage &&
-                'removeItem' in sessionStorage &&
-                'clear' in sessionStorage
+                typeof this.store !== 'undefined' &&
+                'getItem' in this.store &&
+                'setItem' in this.store &&
+                'removeItem' in this.store &&
+                'clear' in this.store
             );
         } catch {
-            return false; // Return false if accessing sessionStorage throws an error
+            return false;
         }
     }
-    set(key: string, value: string): void {
+    async set(key: string, value: any) {
         if (this.isStorageAvailable()) {
-            sessionStorage.setItem(key, value);
+            this.store.setItem(key, value);
         }
     }
 
-    get(key: string): string | null {
+    async get(key: string) {
         if (!this.isStorageAvailable()) return null
-        return sessionStorage.getItem(key);
+        return this.store.getItem(key);
     }
 
-    clear(key?: string): void {
+    async clear(key?: string) {
         if (this.isStorageAvailable()) {
             if (key) {
-                sessionStorage.removeItem(key);
+                this.store.removeItem(key);
             } else {
-                sessionStorage.clear();
+                this.store.clear();
             }
         }
     }
 }
+
+export default Session.getInstance()

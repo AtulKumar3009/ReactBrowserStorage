@@ -31,14 +31,14 @@ class Storage {
         }
     }
 
-    private getStorage(type: StorageType): Local | Session | Cookie | typeof IndexedDB | typeof Temp | undefined {
+    private getStorage(type: StorageType): typeof Local | typeof Session | typeof Cookie | typeof IndexedDB | typeof Temp | undefined {
         switch (type) {
             case StorageType.LOCAL:
-                return new Local();
+                return Local;
             case StorageType.SESSION:
-                return new Session();
+                return Session;
             case StorageType.COOKIE:
-                return new Cookie();
+                return Cookie;
             case StorageType.INDEXED_DB:
                 return IndexedDB;
             case StorageType.TEMP:

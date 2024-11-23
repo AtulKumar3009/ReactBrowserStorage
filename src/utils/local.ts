@@ -1,36 +1,55 @@
-export default class Local {
+import { StorageBrowser, StorageGeneric } from "../types";
+import FakeStorage from "./FakeStorage";
 
+
+class Local implements StorageGeneric {
+    private static instance: Local;
+    private store: StorageBrowser;
+
+
+    constructor() {
+        this.store = (localStorage === undefined ? new FakeStorage() : localStorage) as StorageBrowser
+    }
+
+    static getInstance(): Local {
+        if (!this.instance) {
+            this.instance = new Local();
+        }
+        return this.instance;
+    }
     private isStorageAvailable(): boolean {
         try {
             return (
-                typeof localStorage !== 'undefined' &&
-                'getItem' in localStorage &&
-                'setItem' in localStorage &&
-                'removeItem' in localStorage &&
-                'clear' in localStorage
+                typeof this.store !== 'undefined' &&
+                'getItem' in this.store &&
+                'setItem' in this.store &&
+                'removeItem' in this.store &&
+                'clear' in this.store
             );
         } catch {
-            return false; // Return false if accessing localStorage throws an error
+            return false;
         }
     }
-    set(key: string, value: string) {
+    async set(key: string, value: string) {
         if (this.isStorageAvailable()) {
-            localStorage.setItem(key, value);
+            this.store.setItem(key, value);
         }
     }
 
-    get(key: string): string | null {
+    async get(key: string) {
         if (!this.isStorageAvailable()) return null
-        return localStorage.getItem(key);
+        return this.store.getItem(key);
     }
 
-    clear(key?: string): void {
+    async clear(key?: string) {
         if (this.isStorageAvailable()) {
             if (key) {
-                localStorage.removeItem(key);
+                this.store.removeItem(key);
             } else {
-                localStorage.clear();
+                this.store.clear();
             }
         }
     }
 }
+
+export default Local.getInstance()

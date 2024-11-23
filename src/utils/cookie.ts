@@ -1,39 +1,62 @@
-export default class Cookie {
+import { StorageBrowser, StorageGeneric } from "../types";
+import FakeStorage from "./FakeStorage";
+
+class Cookie implements StorageGeneric {
+    private static instance: Cookie;
+    private store: StorageBrowser;
+
+
+    constructor() {
+        this.store = ((new FakeStorage()) as unknown) as StorageBrowser
+    }
+
+    static getInstance(): Cookie {
+        if (!this.instance) {
+            this.instance = new Cookie();
+        }
+        return this.instance;
+    }
     private isStorageAvailable(): boolean {
-        try {
-            return (
-                typeof document.cookie !== 'undefined'
-            );
-        } catch {
-            return false; // Return false if accessing sessionStorage throws an error
-        }
+        return Boolean(document) && Boolean(document.cookie)
     }
 
-    set(key: string, value: string, expires?: Date, path?: string, domain?: string, secure?: boolean) {
+    async set(key: string, value: string) {
+        value = encodeURIComponent(value)
         if (this.isStorageAvailable()) {
-            let cookie = `${key}=${encodeURIComponent(value)}`;
-            if (expires) cookie += `; expires=${expires.toUTCString()}`;
-            if (path) cookie += `; path=${path}`;
-            if (domain) cookie += `; domain=${domain}`;
-            if (secure) cookie += '; secure';
+            let cookie = `${key}=${value}; path=/`;
             document.cookie = cookie;
+        } else {
+            this.store.setItem(key, value)
         }
     }
 
-    get(key: string) {
-        if (!this.isStorageAvailable()) return null
-        const cookieValue = document.cookie.split(';').find(c => c.trim().startsWith(key + '='));
-        if (!cookieValue) return null;
-        return decodeURIComponent(cookieValue.split('=')[1]);
+    async get(key: string) {
+        let value: string | null
+        if (this.isStorageAvailable()) {
+            const cookieValue = document.cookie.split(';').find(c => c.trim().startsWith(key + '='));
+            if (!cookieValue) return null;
+            value = cookieValue.split('=')[1]
+        } else {
+            value = this.store.getItem(key)
+        }
+        return value ? decodeURIComponent(value) : null;
     }
 
-    clear(key?: string) {
+    async clear(key?: string) {
         if (this.isStorageAvailable()) {
             if (key) {
                 document.cookie = `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
             } else {
                 document.cookie = '';
             }
+        } else {
+            if (key) {
+                this.store.removeItem(key)
+            } else {
+                this.store.clear()
+            }
         }
     }
 }
+
+export default Cookie.getInstance()

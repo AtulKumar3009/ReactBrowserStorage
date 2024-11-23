@@ -1,4 +1,6 @@
-class Temp {
+import { StorageGeneric } from "../types";
+
+class Temp implements StorageGeneric {
     private static instance: Temp;
     private store: Map<string, string>;
 
@@ -13,20 +15,21 @@ class Temp {
         return Temp.instance;
     }
 
-    set(key: string, value: string): void {
+    async set(key: string, value: string) {
         this.store.set(key, value);
     }
 
-    get(key: string): string | undefined {
-        return this.store.get(key);
+    async get(key: string) {
+        const value = this.store.get(key);
+        return value === undefined ? null : value
     }
 
-    delete(key: string): void {
-        this.store.delete(key);
-    }
-
-    clear(): void {
-        this.store.clear();
+    async clear(key?: string) {
+        if (key) {
+            this.store.delete(key);
+        } else {
+            this.store.clear();
+        }
     }
 }
 
