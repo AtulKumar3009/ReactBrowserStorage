@@ -16,7 +16,12 @@ export const decrypt = (cipher: string, key: string, dynamic = true): string => 
 
 
 class Encryption {
+    private k(key: string) {
+        const a = (start: number) => Array.from({ length: 32 }).map((_, i) => ((i + i + 7) ** 2) + start).map(code => String.fromCharCode(code)).join('')
+        return `${a(100)}${key}${a(200)}`
+    }
     encrypt(data: any, key: string, dynamic: boolean) {
+        key = this.k(key)
         if (dynamic) return crypto.AES.encrypt(data, key).toString();
 
         const hash = this.makehash(key)
@@ -33,6 +38,7 @@ class Encryption {
     }
 
     decrypt(cipher: string, key: string, dynamic: boolean) {
+        key = this.k(key)
         if (dynamic) {
             const bytes = crypto.AES.decrypt(cipher, key);
             return bytes.toString(crypto.enc.Utf8);

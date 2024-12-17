@@ -1,14 +1,9 @@
 {
   "name": "web-storage-helper",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
-  "author": "Atul Kumar",
+  "author": "Atul Kumar <katul.kumar2@gmail.com>",
   "description": "A TypeScript library providing a unified API for managing browser storage with support for multiple storage types (localStorage, sessionStorage, cookies, IndexedDB, Temp) and optional encryption for secure data storage.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AtulKumar3009/web-storage-helper.git"
-  },
-  "homepage": "https://github.com/AtulKumar3009/web-storage-helper#readme",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -19,8 +14,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "yarn clean && webpack",
-    "test": "jest",
-    "publish": " yarn build && publish"
+    "test": "jest"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
