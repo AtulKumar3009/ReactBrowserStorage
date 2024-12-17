@@ -1,19 +1,20 @@
-import local from '../utils/local'
+import Local from '../utils/local'
 
-describe("Local Storage", () => {
-    const key = 'test-key';
+describe('Local storage test', () => {
+    test('Should save value in local storage', () => {
+        const saved = Local.set('key', 'value')
+        expect(saved).toBe(true)
+    })
 
-    const { type, data } = { type: 'string', data: 'Hello, World!' }
+    test('Should read value from local storage', () => {
+        const saved = Local.get('key')
+        expect(saved).toBe('value')
+    })
 
-    it(`should save and read data ${type} type correctly `, async () => {
-        await local.set(key, data)
-        const read = await local.get(key)
-        expect(read).toEqual(data)
-    });
-
-    it(`should delete data ${type} type correctly`, async () => {
-        await local.clear(key)
-        const read = await local.get(key)
-        expect(read).toBeNull()
-    });
+    test('Should clear value from local storage', () => {
+        const cleared = Local.clear('key')
+        expect(cleared).toBeTruthy()
+        const saved = Local.get('key')
+        expect(saved).toBeNull()
+    })
 })

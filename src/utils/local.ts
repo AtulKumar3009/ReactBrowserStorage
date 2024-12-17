@@ -1,14 +1,10 @@
-import { StorageBrowser, StorageGeneric } from "../types";
-import FakeStorage from "./FakeStorage";
-
-
-class Local implements StorageGeneric {
+class Local {
     private static instance: Local;
-    private store: StorageBrowser;
+    private store: Storage;
 
 
     constructor() {
-        this.store = (localStorage === undefined ? new FakeStorage() : localStorage) as StorageBrowser
+        this.store = localStorage
     }
 
     static getInstance(): Local {
@@ -30,25 +26,29 @@ class Local implements StorageGeneric {
             return false;
         }
     }
-    async set(key: string, value: string) {
+    set(key: string, value: string) {
         if (this.isStorageAvailable()) {
             this.store.setItem(key, value);
+            return true
         }
+        return false
     }
 
-    async get(key: string) {
+    get(key: string) {
         if (!this.isStorageAvailable()) return null
         return this.store.getItem(key);
     }
 
-    async clear(key?: string) {
+    clear(key?: string) {
         if (this.isStorageAvailable()) {
             if (key) {
                 this.store.removeItem(key);
             } else {
                 this.store.clear();
             }
+            return true
         }
+        return false
     }
 }
 

@@ -12,15 +12,11 @@ export interface StorageConfig {
 
 }
 
-export interface StorageGeneric {
-    set(key: string, value: string): Promise<any>;
-    get(key: string): Promise<any>
-    clear(key?: string): Promise<void>;
-}
+export type SetReturnType<T extends StorageType> =
+    T extends StorageType.INDEXED_DB ? Promise<boolean> : boolean;
 
-export interface StorageBrowser {
-    setItem(key: string, value: string): any
-    getItem(key: string): string | null
-    removeItem(key: string): void
-    clear(): void
-}
+export type GetReturnType<T extends StorageType> =
+    T extends StorageType.INDEXED_DB ? Promise<any> : any;
+
+export type ClearReturnType<T extends StorageType> =
+    T extends StorageType.INDEXED_DB ? Promise<boolean> : boolean;

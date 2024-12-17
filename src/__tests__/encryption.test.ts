@@ -11,8 +11,8 @@ describe('Encryption', () => {
         });
 
         it(`should encrypt and decrypt data ${type} type correctly - dynamic`, () => {
-            const encrypted = encrypt(data, key);
-            const decrypted = decrypt(encrypted, key);
+            const encrypted = encrypt(data, key, true);
+            const decrypted = decrypt(encrypted, key, true);
             expect(decrypted).toEqual(data);
         });
     })

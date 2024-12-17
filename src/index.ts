@@ -1,14 +1,14 @@
-import { StorageConfig, StorageType } from './types';
+import { ClearReturnType, GetReturnType, SetReturnType, StorageConfig, StorageType } from './types';
 import Storage from './storage'
 
 export const configureStorage = (config: StorageConfig) => {
     Storage.configure(config)
 }
 
-const createStorageMethods = (type: StorageType) => ({
-    set: (key: string, value: any, encryption = false) => Storage.set(type, key, value, encryption),
-    get: (key: string, encryption = false) => Storage.get(type, key, encryption),
-    clear: (key?: string, encryption = false) => Storage.clear(type, encryption, key)
+const createStorageMethods = <T extends StorageType>(type: T) => ({
+    set: (key: string, value: any, encryption = false) => Storage.set(type, key, value, encryption) as SetReturnType<T>,
+    get: (key: string, encryption = false) => Storage.get(type, key, encryption) as GetReturnType<T>,
+    clear: (key?: string, encryption = false) => Storage.clear(type, encryption, key) as ClearReturnType<T>
 });
 
 const storage = {

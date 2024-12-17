@@ -1,14 +1,11 @@
-import { StorageBrowser, StorageGeneric } from "../types";
-import FakeStorage from "./FakeStorage";
-
-class Session implements StorageGeneric {
+class Session {
 
     private static instance: Session;
-    private store: StorageBrowser;
+    private store: Storage;
 
 
     constructor() {
-        this.store = (sessionStorage === undefined ? new FakeStorage() : sessionStorage) as StorageBrowser
+        this.store = sessionStorage
     }
 
     static getInstance(): Session {
@@ -30,25 +27,29 @@ class Session implements StorageGeneric {
             return false;
         }
     }
-    async set(key: string, value: any) {
+    set(key: string, value: string) {
         if (this.isStorageAvailable()) {
             this.store.setItem(key, value);
+            return true
         }
+        return false
     }
 
-    async get(key: string) {
+    get(key: string) {
         if (!this.isStorageAvailable()) return null
         return this.store.getItem(key);
     }
 
-    async clear(key?: string) {
+    clear(key?: string) {
         if (this.isStorageAvailable()) {
             if (key) {
                 this.store.removeItem(key);
             } else {
                 this.store.clear();
             }
+            return true
         }
+        return false
     }
 }
 
