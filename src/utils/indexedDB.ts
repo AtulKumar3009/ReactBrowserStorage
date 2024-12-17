@@ -1,10 +1,9 @@
-import { openDB, IDBPDatabase } from 'idb';
-import { StorageGeneric } from '../types';
+import { IDBPDatabase, openDB } from 'idb';
 
 const DB_NAME = 'WebStorageHelper'
 const STORE_NAME = DB_NAME + '-store';
 
-class IndexedDB implements StorageGeneric {
+class IndexedDB {
   private static instance: IndexedDB;
   private dbPromise: Promise<IDBPDatabase>;
 
@@ -27,21 +26,27 @@ class IndexedDB implements StorageGeneric {
 
   async set(key: string, value: string) {
     const db = await this.dbPromise;
-    return db.put(STORE_NAME, value, key);
+    const savedKey = await db.put(STORE_NAME, value, key);
+    return savedKey === key
   }
 
   async get(key: string) {
     const db = await this.dbPromise;
-    const value = await db.get(STORE_NAME, key);
+    const value: string = await db.get(STORE_NAME, key);
     return value === undefined ? null : value;
   }
 
   async clear(key?: string) {
-    const db = await this.dbPromise;
-    if (key) {
-      await db.delete(STORE_NAME, key);
-    } else {
-      await db.clear(STORE_NAME);
+    try {
+      const db = await this.dbPromise;
+      if (key) {
+        await db.delete(STORE_NAME, key);
+      } else {
+        await db.clear(STORE_NAME);
+      }
+      return true
+    } catch (error) {
+      return false
     }
   }
 }

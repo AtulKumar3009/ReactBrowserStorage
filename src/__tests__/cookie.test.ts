@@ -1,19 +1,20 @@
-import cookie from '../utils/cookie'
+import Cookie from '../utils/cookie'
 
-describe("Cookie Storage", () => {
-    const key = 'test-key';
+describe('Cookie storage test', () => {
+    test('Should save value in Cookie storage', () => {
+        const saved = Cookie.set('key', 'value')
+        expect(saved).toBe(true)
+    })
 
-    const { type, data } = { type: 'string', data: 'Hello, World!' }
+    test('Should read value from Cookie storage', () => {
+        const saved = Cookie.get('key')
+        expect(saved).toBe('value')
+    })
 
-    it(`should save and read data ${type} type correctly `, async () => {
-        await cookie.set(key, data)
-        const read = await cookie.get(key)
-        expect(read).toEqual(data)
-    });
-
-    it(`should delete data ${type} type correctly`, async () => {
-        await cookie.clear(key)
-        const read = await cookie.get(key)
-        expect(read).toBeNull()
-    });
+    test('Should clear value from Cookie storage', () => {
+        const cleared = Cookie.clear('key')
+        expect(cleared).toBeTruthy()
+        const saved = Cookie.get('key')
+        expect(saved).toBeNull()
+    })
 })

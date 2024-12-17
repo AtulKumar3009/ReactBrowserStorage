@@ -1,10 +1,10 @@
 # Web Storage Helper
 
-`web-storage-helper` is a TypeScript-based library that simplifies working with different types of storage in the browser (like `localStorage`, `sessionStorage`, `cookies`, `IndexedDB`, and `Temp` storage). It supports data encryption and ensures safe handling of sensitive information.
+`web-storage-helper` is a TypeScript-based library that simplifies working with different types of storage in the browser (like `localStorage`, `sessionStorage`, `cookies`, `indexedDB`, and `temp` storage). It supports data encryption and ensures safe handling of sensitive information.
 
 ## Features
 
-- **Multiple Storage Types**: Supports `localStorage`, `sessionStorage`, `cookies`, `IndexedDB`, and `Temp` storage.
+- **Multiple Storage Types**: Supports `localStorage`, `sessionStorage`, `cookies`, `indexedDB`, and `temp` storage.
 - **Encryption**: Secure data encryption for both keys and values.
 - **Singleton Pattern**: Ensures only one instance of the storage class.
 - **Unified API**: Consistent API for managing all types of storage.
@@ -31,7 +31,7 @@ configureStorage({ encryptionKey: 'your-secret-key', encodeKey: true });
 
 ### Importing Storage Methods
 
-The storage API is exposed via the `storage` object, which contains methods for `localStorage`, `sessionStorage`, `cookies`, `IndexedDB`, and `Temp` storage. Additionally, the `configure` method is now available directly from the `storage` object.
+The storage API is exposed via the `storage` object, which contains methods for `localStorage`, `sessionStorage`, `cookies`, `indexedDB`, and `temp` storage. Additionally, the `configure` method is now available directly from the `storage` object.
 
 ```ts
 import storage from 'web-storage-helper';
@@ -49,19 +49,24 @@ To store data in a specific storage type, you can use the `set` method. Data can
 
 ```ts
 // Store data in localStorage without encryption
-storage.local.set('username', 'Atul', false);
+const saved = storage.local.set('username', 'Atul', false);
+console.log(saved); //true | false
 
 // Store data in sessionStorage with encryption
-storage.session.set('username', 'Atul', true);
+const saved = storage.session.set('username', 'Atul', true);
+console.log(saved); //true | false
 
-// Store data in Temp storage (will be cleared on page refresh)
-storage.temp.set('tempData', { key: 'value' }, false);
+// Store data in temp storage (will be cleared on page refresh)
+const saved = storage.temp.set('tempData', { key: 'value' }, false);
+console.log(saved); //true | false
 
-// Store data in IndexedDB
-storage.indexedDB.set('userData', { name: 'Atul', age: 30 }, false);
+// Store data in indexedDB
+const saved = await storage.indexedDB.set('userData', { name: 'Atul', age: 30 }, false);
+console.log(saved); //true | false
 
 // Store data in cookies with encryption
-storage.cookie.set('authToken', 'your-auth-token', true);
+const saved = storage.cookie.set('authToken', 'your-auth-token', true);
+console.log(saved); //true | false
 ```
 
 ### Retrieving Data (`get`)
@@ -70,18 +75,18 @@ To retrieve data from any storage type, use the `get` method. If encryption was 
 
 ```ts
 // Get data from localStorage (without encryption)
-const username = await storage.local.get('username', false);
+const username = storage.local.get('username', false);
 
 // Get data from sessionStorage (with encryption)
-const encryptedUsername = await storage.session.get('username', true);
+const encryptedUsername = storage.session.get('username', true);
 
-// Get data from Temp storage (non-persistent across page refreshes)
-const tempData = await storage.temp.get('tempData', false);
+// Get data from temp storage (non-persistent across page refreshes)
+const tempData = storage.temp.get('tempData', false);
 
 // Get data from cookies (with encryption)
-const authToken = await storage.cookie.get('authToken', true);
+const authToken = storage.cookie.get('authToken', true);
 
-// Get data from IndexedDB
+// Get data from indexedDB
 const userData = await storage.indexedDB.get('userData', false);
 ```
 
@@ -91,16 +96,20 @@ To clear data from a storage type, use the `clear` method. You can clear a speci
 
 ```ts
 // Clear a specific key from localStorage (without encryption)
-storage.local.clear('username', false);
+const cleared = storage.local.clear('username', false);
+console.log(cleared); //true | false
 
 // Clear all data from sessionStorage
-storage.session.clear();
+const cleared = storage.session.clear();
+console.log(cleared); //true | false
 
 // Clear a specific encrypted key from cookies
-storage.cookie.clear('authToken', true);
+const cleared = storage.cookie.clear('authToken', true);
+console.log(cleared); //true | false
 
-// Clear all data from IndexedDB
-storage.indexedDB.clear();
+// Clear all data from indexedDB
+const cleared= await storage.indexedDB.clear();
+console.log(cleared); //true | false
 ```
 
 ---
@@ -132,9 +141,8 @@ Retrieves data from the specified storage type.
 
 Clears data from the specified storage type.
 
-- **type**: The storage type (`StorageType.LOCAL`, `StorageType.SESSION`, etc.).
-- **encryption**: If `true`, encrypts the key before clearing.
 - **key**: Optional. If provided, only the specific key will be removed. Otherwise, clears all data from the storage type.
+- **encryption**: If `true`, encrypts the key before clearing.
 
 ---
 
@@ -144,17 +152,27 @@ Clears data from the specified storage type.
 import storage from 'web-storage-helper';
 
 // Configure encryption key globally
-storage.configure({ encryptionKey: 'secret-key' });
+storage.configure({ encryptionKey: 'secret-key', encodeKey: true });
 
 // Set encrypted data in localStorage
 storage.local.set('username', 'Atul', true);
 
 // Get encrypted data from localStorage
-const username = await storage.local.get('username', true);
+const username = storage.local.get('username', true);
 console.log(username); // 'Atul'
 
 // Clear encrypted data from localStorage
 storage.local.clear('username', true);
+
+// Set data in indexedDB
+const saved = await storage.indexedDB.set('username', 'Atul');
+
+// Get data from localStorage
+const username = await storage.indexedDB.get('username');
+console.log(username); // 'Atul'
+
+// Clear data from localStorage
+const cleared = await storage.local.clear('username');
 ```
 
 ---

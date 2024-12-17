@@ -31,7 +31,7 @@ class Storage {
         }
     }
 
-    private getStorage(type: StorageType): typeof Local | typeof Session | typeof Cookie | typeof IndexedDB | typeof Temp | undefined {
+    private getStorage(type: StorageType) {
         switch (type) {
             case StorageType.LOCAL:
                 return Local;
@@ -43,14 +43,14 @@ class Storage {
                 return IndexedDB;
             case StorageType.TEMP:
                 return Temp;
-            default:
-                return undefined;
         }
     }
 
-    async set(type: StorageType, key: string, value: any, encryption: boolean) {
+
+
+    set(type: StorageType, key: string, value: any, encryption: boolean) {
         const storage = this.getStorage(type);
-        if (!storage) return
+        if (!storage) return false
         let data = JSON.stringify(value);
 
         if (encryption) {
@@ -65,31 +65,40 @@ class Storage {
         return storage.set(key, data)
     }
 
-    async get(type: StorageType, key: string, encryption: boolean) {
+    get(type: StorageType, key: string, encryption: boolean) {
         const storage = this.getStorage(type);
-        if (!storage) return undefined;
+        if (!storage) return null;
 
         if (encryption && this.config.encodeKey) {
             key = encrypt(key, this.config.encryptionKey!, false);
         }
 
-        let data = await storage.get(key)
+        const getValue = (data: string | null) => {
+            if (data && encryption) {
+                this.validateEncryption();
+                data = decrypt(data, this.config.encryptionKey!);
+            }
 
-        if (data && encryption) {
-            this.validateEncryption();
-            data = decrypt(data, this.config.encryptionKey!);
+            try {
+                return data ? JSON.parse(data) : null;
+            } catch (error) {
+                return data
+            }
         }
 
-        try {
-            return data ? JSON.parse(data) : null;
-        } catch (error) {
-            return data
+        const data = storage.get(key)
+        if (data instanceof Promise) {
+            return new Promise(resolve =>
+                data.then(data => resolve(getValue(data)))
+            )
         }
+        return getValue(data)
+
     }
 
-    async clear(type: StorageType, encryption: boolean, key?: string) {
+    clear(type: StorageType, encryption: boolean, key?: string) {
         const storage = this.getStorage(type);
-        if (!storage) return undefined;
+        if (!storage) return false;
         if (key && encryption && this.config.encodeKey) {
             key = encrypt(key, this.config.encryptionKey!, false);
         }

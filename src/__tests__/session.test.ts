@@ -1,19 +1,20 @@
-import session from '../utils/session'
+import Session from '../utils/session'
 
-describe("Session Storage", () => {
-    const key = 'test-key';
+describe('Session storage test', () => {
+    test('Should save value in Session storage', () => {
+        const saved = Session.set('key', 'value')
+        expect(saved).toBe(true)
+    })
 
-    const { type, data } = { type: 'string', data: 'Hello, World!' }
+    test('Should read value from Session storage', () => {
+        const saved = Session.get('key')
+        expect(saved).toBe('value')
+    })
 
-    it(`should save and read data ${type} type correctly `, async () => {
-        await session.set(key, data)
-        const read = await session.get(key)
-        expect(read).toEqual(data)
-    });
-
-    it(`should delete data ${type} type correctly`, async () => {
-        await session.clear(key)
-        const read = await session.get(key)
-        expect(read).toBeNull()
-    });
+    test('Should clear value from Session storage', () => {
+        const cleared = Session.clear('key')
+        expect(cleared).toBeTruthy()
+        const saved = Session.get('key')
+        expect(saved).toBeNull()
+    })
 })

@@ -1,45 +1,22 @@
 import "core-js/stable/structured-clone";
 import "fake-indexeddb/auto";
-import indexedDB from '../utils/indexedDB';
+import IndexedDB from '../utils/indexedDB';
 
-describe("IndexedDB", () => {
-    const key = 'test-key';
-    const testData = [
-        { type: 'string', data: 'Hello, World!' },
-        { type: 'number', data: 12345 },
-        { type: 'boolean', data: true },
-        { type: 'object', data: { name: 'John', age: 30 } },
-        { type: 'array', data: [1, 2, 3, 4, 5] },
-        { type: 'null', data: null },
-    ];
+describe('IndexedDB storage test', () => {
+    test('Should save value in IndexedDB storage', async () => {
+        const saved = await IndexedDB.set('key', 'value')
+        expect(saved).toBe(true)
+    })
 
-    const { type, data } = { type: 'string', data: 'Hello, World!' }
+    test('Should read value from IndexedDB storage', async () => {
+        const saved = await IndexedDB.get('key')
+        expect(saved).toBe('value')
+    })
 
-    it(`should save and read data ${type} type correctly `, async () => {
-        await indexedDB.set(key, data)
-        const read = await indexedDB.get(key)
-        expect(read).toEqual(data)
-    });
-
-    it(`should delete data ${type} type correctly`, async () => {
-        await indexedDB.clear(key)
-        const read = await indexedDB.get(key)
-        expect(read).toBeNull()
-    });
-
-
-
-    // testData.forEach(({ type, data }) => {
-    //     it(`should save and read data ${type} type correctly `, async () => {
-    //         await indexedDB.set(key, data)
-    //         const read = await indexedDB.get(key)
-    //         expect(read).toEqual(data)
-    //     });
-
-    //     it(`should delete data ${type} type correctly`, async () => {
-    //         await indexedDB.clear(key)
-    //         const read = await indexedDB.get(key)
-    //         expect(read).toBeNull()
-    //     });
-    // })
+    test('Should clear value from IndexedDB storage', async () => {
+        const cleared = await IndexedDB.clear('key')
+        expect(cleared).toBeTruthy()
+        const saved = await IndexedDB.get('key')
+        expect(saved).toBeNull()
+    })
 })

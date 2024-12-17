@@ -1,19 +1,20 @@
-import temp from '../utils/temp'
+import Temp from '../utils/temp'
 
-describe("Temp Storage", () => {
-    const key = 'test-key';
+describe('Temp storage test', () => {
+    test('Should save value in Temp storage', () => {
+        const saved = Temp.set('key', 'value')
+        expect(saved).toBe(true)
+    })
 
-    const { type, data } = { type: 'string', data: 'Hello, World!' }
+    test('Should read value from Temp storage', () => {
+        const saved = Temp.get('key')
+        expect(saved).toBe('value')
+    })
 
-    it(`should save and read data ${type} type correctly `, async () => {
-        await temp.set(key, data)
-        const read = await temp.get(key)
-        expect(read).toEqual(data)
-    });
-
-    it(`should delete data ${type} type correctly`, async () => {
-        await temp.clear(key)
-        const read = await temp.get(key)
-        expect(read).toBeNull()
-    });
+    test('Should clear value from Temp storage', () => {
+        const cleared = Temp.clear('key')
+        expect(cleared).toBeTruthy()
+        const saved = Temp.get('key')
+        expect(saved).toBeNull()
+    })
 })
